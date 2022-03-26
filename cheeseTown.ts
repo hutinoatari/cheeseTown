@@ -19,7 +19,7 @@ const compile = (markup: string): string => {
     {
       regex: /^\[title\] (.+)/,
       convert: (_, word) => {
-        return `<h1>${word}</h1>`;
+        return `<h1>${word.trim()}</h1>`;
       },
     },
     {
@@ -27,7 +27,7 @@ const compile = (markup: string): string => {
       convert: (_, word) => {
         chapterCount += 1;
         sectionCount = subsectionCount = pictureCount = 0;
-        return `<h2>${chapterCount} ${word}</h2>`;
+        return `<h2>${chapterCount} ${word.trim()}</h2>`;
       },
     },
     {
@@ -35,27 +35,27 @@ const compile = (markup: string): string => {
       convert: (_, word) => {
         sectionCount += 1;
         subsectionCount = 0;
-        return `<h3>${chapterCount}.${sectionCount} ${word}</h3>`;
+        return `<h3>${chapterCount}.${sectionCount} ${word.trim()}</h3>`;
       },
     },
     {
       regex: /^\[subsection\] (.+)/,
       convert: (_, word) => {
         subsectionCount += 1;
-        return `<h4>${chapterCount}.${sectionCount}.${subsectionCount} ${word}</h4>`;
+        return `<h4>${chapterCount}.${sectionCount}.${subsectionCount} ${word.trim()}</h4>`;
       },
     },
     {
       regex: /^\[picture\]\{(.+)\} (.+)/,
       convert: (_, url, caption) => {
         pictureCount += 1;
-        return `<figure><img src="${url}"><figcaption>図${chapterCount}.${pictureCount} ${caption}</figcaption></figure>`;
+        return `<figure><img src="${url.trim()}"><figcaption>図${chapterCount}.${pictureCount} ${caption.trim()}</figcaption></figure>`;
       },
     },
     {
       regex: /(.*)/,
-      convert: (text) => {
-        return `<p>${text}</p>`;
+      convert: (_, text) => {
+        return `<p>${text.trim()}</p>`;
       },
     },
   ];
