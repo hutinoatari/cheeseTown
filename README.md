@@ -79,7 +79,7 @@ text
 ### 変換前
 
 ```
-[picture] {url} caption
+[picture]{url} caption
 ```
 
 ### 変換後

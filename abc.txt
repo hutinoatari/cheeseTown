@@ -7,8 +7,8 @@ paraglaph
 paraglaph
 [chapter] chapter
 [section] section
-[picture] {url} caption
+[picture]{url} caption
 [section] section
 ab<c>d
    abcd   
-[ab] {c} d
+[ab]{c} d

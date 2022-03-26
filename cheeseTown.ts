@@ -1,81 +1,74 @@
-interface ElementData {
-  elementType: string;
-  option: string | null;
-  text: string;
+interface Syntax {
+  regex: RegExp;
+  convert(...args: string[]): string;
 }
 
-const getElementData = (elemnt: string): ElementData | null => {
-  const syntaxRegex = /^\[(.+)\] (.+)/;
-  const optionRegex = /^\{(.+)\} (.+)/;
-  const syntaxMatch = elemnt.match(syntaxRegex);
-  if (syntaxMatch === null) return null;
-  const elementType = syntaxMatch[1];
-  const optionAndText = syntaxMatch[2];
-  const optionMatch = optionAndText.match(optionRegex);
-  if (optionMatch !== null) {
-    return {
-      elementType: elementType,
-      option: optionMatch[1],
-      text: optionMatch[2],
-    };
-  } else {
-    return {
-      elementType: elementType,
-      option: null,
-      text: optionAndText,
-    };
-  }
-};
-
 const compile = (markup: string): string => {
-  const escapedMarkup: string = markup.replace(
-    /[<>]/g,
-    (c) => c == "<" ? "&lt;" : "&gt;",
-  );
-  const lines: string[] = escapedMarkup.split("\n");
-  let html: string = "";
+  const lexicalAnalysis = (text: string): string[] => {
+    return text.replace(
+      /[<>]/g,
+      (c) => c == "<" ? "&lt;" : "&gt;",
+    ).split("\n").filter((line) => line.trim() !== "");
+  };
+
   let chapterCount: number = 0;
   let sectionCount: number = 0;
   let subsectionCount: number = 0;
   let pictureCount: number = 0;
-  for (const line of lines) {
-    if (line.trim() === "") continue;
-    const elementData = getElementData(line);
-    if (elementData === null) {
-      html += `<p>${line}</p>`;
-      continue;
-    }
-    switch (elementData.elementType) {
-      case "title":
-        html += `<h1>${elementData.text}</h1>`;
-        break;
-      case "chapter":
+  const syntaxAnalyzer: Syntax[] = [
+    {
+      regex: /^\[title\] (.+)/,
+      convert: (_, word) => {
+        return `<h1>${word}</h1>`;
+      },
+    },
+    {
+      regex: /^\[chapter\] (.+)/,
+      convert: (_, word) => {
         chapterCount += 1;
-        sectionCount = 0;
-        subsectionCount = 0;
-        pictureCount = 0;
-        html += `<h2>${chapterCount}. ${elementData.text}</h2>`;
-        break;
-      case "section":
+        sectionCount = subsectionCount = pictureCount = 0;
+        return `<h2>${chapterCount}. ${word}</h2>`;
+      },
+    },
+    {
+      regex: /^\[section\] (.+)/,
+      convert: (_, word) => {
         sectionCount += 1;
         subsectionCount = 0;
-        html += `<h3>${chapterCount}.${sectionCount}. ${elementData.text}</h3>`;
-        break;
-      case "subsection":
+        return `<h3>${chapterCount}.${sectionCount}. ${word}</h3>`;
+      },
+    },
+    {
+      regex: /^\[subsection\] (.+)/,
+      convert: (_, word) => {
         subsectionCount += 1;
-        html +=
-          `<h4>${chapterCount}.${sectionCount}.${subsectionCount}. ${elementData.text}</h4>`;
-        break;
-      case "picture":
+        return `<h4>${chapterCount}.${sectionCount}.${subsectionCount}. ${word}</h4>`;
+      },
+    },
+    {
+      regex: /^\[picture\]\{(.+)\} (.+)/,
+      convert: (_, url, caption) => {
         pictureCount += 1;
-        html +=
-          `<figure><img src="${elementData.option}"><figcaption>図${chapterCount}.${pictureCount} ${elementData.text}</figcaption></figure>`;
-        break;
-      default:
-        html += `<p>${elementData.text}</p>`;
-        break;
+        return `<figure><img src="${url}"><figcaption>${caption}</figcaption></figure>`;
+      },
+    },
+    {
+      regex: /(.*)/,
+      convert: (text) => {
+        return `<p>${text}</p>`;
+      },
+    },
+  ];
+
+  const tokens = lexicalAnalysis(markup);
+  const html = tokens.map((token) => {
+    for (const syntax of syntaxAnalyzer) {
+      const match = token.match(syntax.regex);
+      if (match === null) continue;
+      return syntax.convert(...match);
     }
-  }
+  }).join("");
+
   return html;
 };
 
