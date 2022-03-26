@@ -27,7 +27,7 @@ const compile = (markup: string): string => {
       convert: (_, word) => {
         chapterCount += 1;
         sectionCount = subsectionCount = pictureCount = 0;
-        return `<h2>${chapterCount}. ${word}</h2>`;
+        return `<h2>${chapterCount} ${word}</h2>`;
       },
     },
     {
@@ -35,21 +35,21 @@ const compile = (markup: string): string => {
       convert: (_, word) => {
         sectionCount += 1;
         subsectionCount = 0;
-        return `<h3>${chapterCount}.${sectionCount}. ${word}</h3>`;
+        return `<h3>${chapterCount}.${sectionCount} ${word}</h3>`;
       },
     },
     {
       regex: /^\[subsection\] (.+)/,
       convert: (_, word) => {
         subsectionCount += 1;
-        return `<h4>${chapterCount}.${sectionCount}.${subsectionCount}. ${word}</h4>`;
+        return `<h4>${chapterCount}.${sectionCount}.${subsectionCount} ${word}</h4>`;
       },
     },
     {
       regex: /^\[picture\]\{(.+)\} (.+)/,
       convert: (_, url, caption) => {
         pictureCount += 1;
-        return `<figure><img src="${url}"><figcaption>${caption}</figcaption></figure>`;
+        return `<figure><img src="${url}"><figcaption>図${chapterCount}.${pictureCount} ${caption}</figcaption></figure>`;
       },
     },
     {

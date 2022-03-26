@@ -12,3 +12,4 @@ paraglaph
 ab<c>d
    abcd   
 [ab]{c} d
+[section] 
