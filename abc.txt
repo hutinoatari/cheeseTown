@@ -1,6 +1,14 @@
-[title] a
-[section] bc
-[subsection]    d
-[subsubsection] [ef]
-gh<i>j
-[klm] n
+[title] title
+[chapter] chapter
+[section] section
+[subsection] subsection
+paraglaph
+[subsection] subsection
+paraglaph
+[chapter] chapter
+[section] section
+[picture] {url} caption
+[section] section
+ab<c>d
+   abcd   
+[ab] {c} d
