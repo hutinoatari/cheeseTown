@@ -72,9 +72,10 @@ const compile = (markup: string): string => {
       return syntax.convert(...match);
     }
   }).join("");
+  const css = Deno.readTextFileSync("./style.css");
 
   const fullHtml =
-    `<html lang="ja"><head><meta charset="UTF-8"><title>${titleName} | ${authorName}</title><link href="./style.css" rel="stylesheet"></head><body>${html}</body></html>`;
+    `<html lang="ja"><head><meta charset="UTF-8"><title>${titleName} | ${authorName}</title><style>${css}</style></head><body>${html}</body></html>`;
   return fullHtml;
 };
 
