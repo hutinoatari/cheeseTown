@@ -11,15 +11,19 @@ const compile = (markup: string): string => {
     ).split("\n").filter((line) => line.trim() !== "");
   };
 
+  let titleName: string = "";
+  let authorName: string = "";
   let chapterCount: number = 0;
   let sectionCount: number = 0;
   let subsectionCount: number = 0;
   let pictureCount: number = 0;
   const syntaxAnalyzer: Syntax[] = [
     {
-      regex: /^\[title\] (.+)/,
-      convert: (_, word) => {
-        return `<h1>${word.trim()}</h1>`;
+      regex: /^\[title\]{(.+)} (.+)/,
+      convert: (_, author, word) => {
+        titleName = word.trim();
+        authorName = author.trim();
+        return `<h1>${word.trim()}</h1><p>${author.trim()}</p>`;
       },
     },
     {
@@ -49,7 +53,7 @@ const compile = (markup: string): string => {
       regex: /^\[picture\]\{(.+)\} (.+)/,
       convert: (_, url, caption) => {
         pictureCount += 1;
-        return `<figure><img src="${url.trim()}"><figcaption>図${chapterCount}.${pictureCount} ${caption.trim()}</figcaption></figure>`;
+        return `<figure><img src="${url.trim()}"><figcaption>図-${chapterCount}.${pictureCount} ${caption.trim()}</figcaption></figure>`;
       },
     },
     {
@@ -69,7 +73,9 @@ const compile = (markup: string): string => {
     }
   }).join("");
 
-  return html;
+  const fullHtml =
+    `<html lang="ja"><head><meta charset="UTF-8"><title>${titleName} | ${authorName}</title><link href="./style.css" rel="stylesheet"></head><body>${html}</body></html>`;
+  return fullHtml;
 };
 
 export { compile };

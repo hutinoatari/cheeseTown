@@ -2,7 +2,7 @@
 
 ## コンパイル
 
-`deno run --allow-read --allow-write main.ts abc.txt`
+`deno run --allow-read --allow-write main.ts sample.txt`
 
 ## タイトル
 
@@ -51,6 +51,6 @@ text
 ===(convert)===
 <figure>
     <img src="url">
-    <figcaption>図n.x caption</figcaption>
+    <figcaption>図-n.x caption</figcaption>
 </figure>
 ```
