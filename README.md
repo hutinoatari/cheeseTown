@@ -7,9 +7,10 @@
 ## タイトル
 
 ```
-[title] word
+[title]{author} word
 ===(convert)===
 <h1>word</h1>
+<p>author</p>
 ```
 
 ## 章
