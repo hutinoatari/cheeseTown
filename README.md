@@ -6,87 +6,51 @@
 
 ## タイトル
 
-### 変換前
-
 ```
 [title] word
-```
-
-### 変換後
-
-```
+===(convert)===
 <h1>word</h1>
 ```
 
 ## 章
 
-### 変換前
-
 ```
 [chapter] word
-```
-
-### 変換後
-
-```
+===(convert)===
 <h2>x word</h2>
 ```
 
 ## 節
 
-### 変換前
-
 ```
 [section] word
-```
-
-### 変換後
-
-```
+===(convert)===
 <h3>n.x word</h3>
 ```
 
 ## 項
 
-### 変換前
-
 ```
 [subsection] word
-```
-
-### 変換後
-
-```
+===(convert)===
 <h4>n.m.x word</h4>
 ```
 
 ## 段落
 
-### 変換前
-
 ```
 text
-```
-
-### 変換後
-
-```
+===(convert)===
 <p>text</p>
 ```
 
 ## 図
 
-### 変換前
-
 ```
 [picture]{url} caption
-```
-
-### 変換後
-
-```
+===(convert)===
 <figure>
     <img src="url">
-    <figcaption>caption</figcaption>
+    <figcaption>図n.x caption</figcaption>
 </figure>
 ```
