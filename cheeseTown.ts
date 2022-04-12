@@ -50,6 +50,15 @@ const compile = (markup: string): string => {
       },
     },
     {
+      regex: /^\[list\] (.+)/,
+      convert: (_, text) => {
+        const items = text.split("|");
+        return `<ul>${
+          items.map((item) => `<li>${item.trim()}</li>`).join("")
+        }</ul>`;
+      },
+    },
+    {
       regex: /^\[picture\]\{(.+)\} (.+)/,
       convert: (_, url, caption) => {
         pictureCount += 1;
@@ -72,11 +81,8 @@ const compile = (markup: string): string => {
       return syntax.convert(...match);
     }
   }).join("");
-  const css = Deno.readTextFileSync("./style.css");
 
-  const fullHtml =
-    `<html lang="ja"><head><meta charset="UTF-8"><title>${titleName} | ${authorName}</title><style>${css}</style></head><body>${html}</body></html>`;
-  return fullHtml;
+  return html;
 };
 
 export { compile };
