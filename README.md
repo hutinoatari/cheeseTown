@@ -1,9 +1,5 @@
 # cheeseTown
 
-## コンパイル
-
-`deno run --allow-read --allow-write main.ts sample.txt`
-
 ## タイトル
 
 ```
