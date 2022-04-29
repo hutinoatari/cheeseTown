@@ -11,11 +11,13 @@ const compile = (markup: string): string => {
         ).split("\n").filter((line) => line.trim() !== "");
     };
 
-    let chapterCount: number = 0;
-    let sectionCount: number = 0;
-    let subsectionCount: number = 0;
-    let pictureCount: number = 0;
     const syntaxAnalyzer: Syntax[] = [
+        {
+            regex: /^\[style\]{(.+)}/,
+            convert: (_, url) => {
+                return `<link rel="stylesheet" href="${url}">`;
+            },
+        },
         {
             regex: /^\[title\]{(.+)}(.+)/,
             convert: (_, author, word) => {
@@ -25,24 +27,19 @@ const compile = (markup: string): string => {
         {
             regex: /^\[chapter\](.+)/,
             convert: (_, word) => {
-                chapterCount += 1;
-                sectionCount = subsectionCount = pictureCount = 0;
-                return `<h2>${chapterCount} ${word.trim()}</h2>`;
+                return `<h2>${word.trim()}</h2>`;
             },
         },
         {
             regex: /^\[section\](.+)/,
             convert: (_, word) => {
-                sectionCount += 1;
-                subsectionCount = 0;
-                return `<h3>${chapterCount}.${sectionCount} ${word.trim()}</h3>`;
+                return `<h3>${word.trim()}</h3>`;
             },
         },
         {
             regex: /^\[subsection\](.+)/,
             convert: (_, word) => {
-                subsectionCount += 1;
-                return `<h4>${chapterCount}.${sectionCount}.${subsectionCount} ${word.trim()}</h4>`;
+                return `<h4>${word.trim()}</h4>`;
             },
         },
         {
@@ -57,8 +54,7 @@ const compile = (markup: string): string => {
         {
             regex: /^\[picture\]\{(.+)\}(.+)/,
             convert: (_, url, caption) => {
-                pictureCount += 1;
-                return `<figure><img src="${url.trim()}"><figcaption>図-${chapterCount}.${pictureCount} ${caption.trim()}</figcaption></figure>`;
+                return `<figure><img src="${url.trim()}"><figcaption>${caption.trim()}</figcaption></figure>`;
             },
         },
         {

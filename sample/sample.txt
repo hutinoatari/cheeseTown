@@ -1,0 +1,16 @@
+[style]{./basic.css}
+[title]{あああ} あああ
+[chapter] あああ
+[section] あああ
+[subsection] あああ
+[subsection] あああ
+[section] あああ
+[subsection] あああ
+[subsection] あああ
+[chapter] あああ
+[section] あああ
+[subsection] あああ
+[subsection] あああ
+[section] あああ
+[subsection] あああ
+[subsection] あああ
