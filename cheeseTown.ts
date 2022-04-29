@@ -55,7 +55,7 @@ const cheeseTownToHtml = (markup: string): string => {
     const lines = markup
         .replace(/[<>]/g, (c) => (c === "<" ? "&lt;" : "&gt;"))
         .split("\n")
-        .filter((e) => e !== "");
+        .filter((e) => e.trim() !== "");
     const html = lines
         .map((line) => {
             for (const syntax of parser) {
