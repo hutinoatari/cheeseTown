@@ -1,6 +1,8 @@
+import { parse } from "https://deno.land/std/encoding/csv.ts";
+
 interface Syntax {
     regex: RegExp;
-    convert(...args: string[]): string;
+    convert(...args: string[]): string | Promise<string>;
 }
 
 const parser: Syntax[] = [
@@ -49,23 +51,40 @@ const parser: Syntax[] = [
             return `<figure><img src="${url.trim()}"><figcaption>${caption.trim()}</figcaption></figure>`;
         },
     },
+    {
+        regex: /^\[table\]\{(.+)\}(.+)/,
+        convert: async (_, url, caption) => {
+            const text = await Deno.readTextFile(url);
+            const [head, ...body] = await parse(text) as string[][];
+            return `<figure><figcaption>${caption.trim()}</figcaption><table><thead><tr>${
+                head.map((e: string) => `<th>${e.trim()}</th>`).join("")
+            }</tr></thead><tbody>${
+                body.map((row: string[]) =>
+                    `<tr>${
+                        row.map((e: string) => `<td>${e.trim()}</td>`).join("")
+                    }</tr>`
+                )
+                    .join("")
+            }</tbody></table>`;
+        },
+    },
 ];
 
-const cheeseTownToHtml = (markup: string): string => {
+const cheeseTownToHtml = async (markup: string): Promise<string> => {
     const lines = markup
         .replace(/[<>]/g, (c) => (c === "<" ? "&lt;" : "&gt;"))
         .split("\n")
         .filter((e) => e.trim() !== "");
-    const html = lines
-        .map((line) => {
+    const html = (await Promise.all(lines
+        .map(async (line) => {
             for (const syntax of parser) {
                 const match = line.match(syntax.regex);
-                if (match !== null) return syntax.convert(...match);
+                if (match !== null) return await syntax.convert(...match);
             }
             return `<p>${line.trim()}</p>`;
-        })
+        })))
         .join("");
-    return html;
+    return new Promise((res) => res(html));
 };
 
 export { cheeseTownToHtml };

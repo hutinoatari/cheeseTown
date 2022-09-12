@@ -14,3 +14,4 @@
 [section] あああ
 [subsection] あああ
 [subsection] あああ
+[table]{./data.csv} 表

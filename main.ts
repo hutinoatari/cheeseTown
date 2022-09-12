@@ -12,7 +12,7 @@ const outputFileName = join(
     `${basename(inputFileName, extname(inputFileName))}.html`,
 );
 const inputFileData = await Deno.readTextFile(inputFileName);
-const outputFileData = cheeseTownToHtml(inputFileData);
+const outputFileData = await cheeseTownToHtml(inputFileData);
 await Deno.writeTextFileSync(outputFileName, outputFileData);
 
 console.log("compile completed...");

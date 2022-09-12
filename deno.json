@@ -9,6 +9,6 @@
         }
     },
     "tasks": {
-        "compile": "deno run --allow-read --allow-write main.ts sample/sample.txt"
+        "compile": "deno run -A main.ts ./sample.txt"
     }
 }

@@ -6,7 +6,7 @@ h2::before {
     content: counter(chapter) " ";
 }
 h2 {
-    counter-reset: section figure;
+    counter-reset: section image-figure table-figure;
 }
 h3::before {
     counter-increment: section;
@@ -19,9 +19,13 @@ h4::before {
     counter-increment: subsection;
     content: counter(chapter) "." counter(section) "." counter(subsection) " ";
 }
-figcaption::before {
-    counter-increment: figure;
-    content: "図" counter(chapter) "." counter(figure);
+figure:has(> img) > figcaption::before {
+    counter-increment: image-figure;
+    content: "図" counter(chapter) "." counter(image-figure);
+}
+figure:has(> table) > figcaption::before {
+    counter-increment: table-figure;
+    content: "表" counter(chapter) "." counter(table-figure);
 }
 p:not(h1 + p) {
     text-indent: 1em;
