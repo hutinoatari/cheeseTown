@@ -47,3 +47,11 @@ text
 ```
 [picture]{url} caption
 ```
+
+## 表
+
+```
+[table]{url} caption
+```
+
+csvを読む
